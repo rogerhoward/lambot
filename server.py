@@ -16,7 +16,7 @@ app = flask.Flask(__name__)
 #  Bot endpoint                                  #
 #------------------------------------------------#
 
-@app.route('/chat/')
+@app.route('/chat/', methods=['POST'])
 def chat():
     """
     Dual routes which support browsing a list of zoomable images on your S3 bucket,
