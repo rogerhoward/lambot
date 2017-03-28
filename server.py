@@ -29,7 +29,7 @@ def bot():
     else:
         message = command_data['text']
 
-    response = {'text': message}
+    response = {'text': message, 'response_type': 'in_channel'}
     return flask.jsonify(response)
 
 
