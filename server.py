@@ -16,13 +16,21 @@ app = flask.Flask(__name__)
 #  Bot endpoint                                  #
 #------------------------------------------------#
 
-@app.route('/chat/', methods=['POST'])
-def chat():
+@app.route('/', methods=['POST'])
+def bot():
     """
-    Dual routes which support browsing a list of zoomable images on your S3 bucket,
-    and viewing each one in an Open Seadragon viewer.
+    Main route which handles inbound Slack commands.
     """
-    return flask.jsonify({'hello': 'world'})
+
+    command_data = flask.request.form
+
+    if command_data['text'] == '':
+        message = 'Hello world!'
+    else:
+        message = command_data['text']
+
+    response = {'text': message}
+    return flask.jsonify(response)
 
 
 #------------------------------------------------#
