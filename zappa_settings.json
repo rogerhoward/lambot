@@ -1,0 +1,8 @@
+{
+    "dev": {
+    "app_function": "server.app", 
+    "s3_bucket": "lambot-config",
+    "timeout_seconds": 300,
+    "project_name": "lambot",
+    }
+}
