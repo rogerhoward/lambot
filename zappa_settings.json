@@ -1,8 +1,11 @@
 {
-    "dev": {
-    "app_function": "server.app", 
-    "s3_bucket": "lambot-config",
-    "timeout_seconds": 300,
-    "project_name": "lambot",
+    "cnc": {
+        "app_function": "server.app", 
+        "s3_bucket": "lambot-config",
+        "timeout_seconds": 300,
+        "project_name": "lambot",
+        "domain": "cnc.lambot.cc",
+        "lets_encrypt_key": "/Users/rogerhoward/.ssl/cnc.lambot.cc.key",  // Path to account key
+        "lets_encrypt_expression": "rate(15 days)",                     // LE Renew schedule
     }
 }
