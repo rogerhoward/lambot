@@ -17,6 +17,7 @@ plugin_source = PluginBase(package='plugins').make_plugin_source(searchpath=['./
 plugin_names = plugin_source.list_plugins()
 plugins = [plugin_source.load_plugin(x).Action() for x in plugin_names]
 
+
 #------------------------------------------------#
 #  Bot endpoint                                  #
 #------------------------------------------------#
@@ -31,7 +32,7 @@ def bot():
 
     for plugin in plugins:
         if plugin.load(command_data):
-            response = {'text': plugin.response, 'response_type': 'in_channel'}
+            response = {'text': plugin.response, 'response_type': 'ephemeral'}
             return flask.jsonify(response)
 
 
