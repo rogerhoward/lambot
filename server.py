@@ -15,7 +15,10 @@ app = flask.Flask(__name__)
 
 plugin_source = PluginBase(package='plugins').make_plugin_source(searchpath=['./plugins'])
 plugin_names = plugin_source.list_plugins()
-plugins = [plugin_source.load_plugin(x).Action() for x in plugin_names]
+
+
+def run_actions(payload):
+    [plugin_source.load_plugin(x).Action(payload) for x in plugin_names]
 
 
 #------------------------------------------------#
@@ -29,11 +32,16 @@ def bot():
     """
 
     command_data = flask.request.form
+    run_actions(command_data)
 
-    for plugin in plugins:
-        if plugin.load(command_data):
-            response = {'text': plugin.response, 'response_type': 'ephemeral'}
-            return flask.jsonify(response)
+    response = flask.Response()
+    response.status_code = 200
+    return response
+
+    # for plugin in plugins:
+    #     if plugin.load(command_data):
+    #         response = {'text': plugin.response, 'response_type': 'ephemeral'}
+    #         return flask.jsonify(response)
 
 
 #------------------------------------------------#
@@ -46,7 +54,8 @@ def info():
     """
     Route which returns environmental info as a JSON object.
     """
-    plugins_list = [x.info for x in plugins]
+    plugins_list = [plugin_source.load_plugin(x).Action(None).info for x in plugin_names]
+
     return flask.jsonify({'env': config.ENV, 'plugins': plugins_list})
 
 

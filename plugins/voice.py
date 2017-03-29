@@ -1,9 +1,14 @@
+import requests
+
 
 class Action(object):
     payload = None
+    response_type = 'ephemeral'
 
-    def __init__(self):
-        print('initializing voice')
+    def __init__(self, payload):
+        print('loading calendar with', payload)
+        self.payload = payload
+        self.respond()
 
     @property
     def info(self):
@@ -13,11 +18,11 @@ class Action(object):
                 'version': 1.0}
 
     @property
-    def load(self, payload):
-        print('loading voice with', payload)
-        self.payload = payload
-        return False
-
-    @property
     def response(self):
-        return self.payload.get('text')
+        return None
+
+    def respond(self):
+        if self.response:
+            pass
+        else:
+            pass
