@@ -23,5 +23,8 @@ class Action(object):
 
     def respond(self):
         message = 'echo: {}'.format(self.payload.get('text'))
-        response = {'text': message, 'response_type': self.response_type}
-        requests.post(self.payload.get('response_url'), data=response)
+        url = self.payload.get('response_url')
+        print(message, url)
+        if url:
+            response_payload = {'text': message, 'response_type': self.response_type}
+            requests.post(url, data=response_payload)
