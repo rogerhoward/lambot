@@ -1,5 +1,5 @@
 import requests
-
+import json
 
 class Action(object):
     payload = None
@@ -27,4 +27,4 @@ class Action(object):
         print(message, url)
         if url:
             response_payload = {'text': message, 'response_type': self.response_type}
-            requests.post(url, data=response_payload)
+            requests.post(url, json=response_payload)
