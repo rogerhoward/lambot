@@ -33,7 +33,7 @@ def bot():
     Main route which handles inbound Slack commands.
     """
 
-    command_data = dict(flask.request.form)
+    command_data = flask.request.form.to_dict()
     print(command_data)
     run_actions(command_data)
 
