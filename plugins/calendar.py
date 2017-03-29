@@ -17,12 +17,10 @@ class Action(object):
                 'description': 'Calendar of Events', 
                 'version': 1.0}
 
-    @property
-    def response(self):
-        return {'text': 'echo:' + self.payload.get('text'), 'response_type': self.response_type}
+    # @property
+    # def response(self):
+    #     return {'text': 'echo:' + self.payload.get('text'), 'response_type': self.response_type}
 
     def respond(self):
-        if self.response:
-            requests.post(self.payload.get('response_url'), data = self.response)
-        else:
-            pass
+        response = {'text': 'echo:' + self.payload.get('text'), 'response_type': self.response_type}
+        requests.post(self.payload.get('response_url'), data=response)

@@ -18,7 +18,9 @@ plugin_names = plugin_source.list_plugins()
 
 
 def run_actions(payload):
-    [plugin_source.load_plugin(x).Action(payload) for x in plugin_names]
+    print(payload)
+    for plugin_name in plugin_names:
+        plugin_source.load_plugin(plugin_name).Action(payload)
 
 
 #------------------------------------------------#
@@ -31,8 +33,8 @@ def bot():
     Main route which handles inbound Slack commands.
     """
 
-    command_data = flask.request.form
-    print(dict(command_data))
+    command_data = dict(flask.request.form)
+    print(command_data)
     run_actions(command_data)
 
     response = flask.Response()
