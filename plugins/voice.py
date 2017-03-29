@@ -1,21 +1,22 @@
-    
+
 class Action(object):
     payload = None
 
     def __init__(self):
-        print('initializing calendar')
+        print('initializing voice')
 
     @property
     def info(self):
-        return {'name': 'calendar', 
-                'title': 'Calendar of Events', 
-                'description': 'Calendar of Events', 
+        return {'name': 'voice', 
+                'title': 'Voice Synth', 
+                'description': 'A text-to-speech synthesizer.', 
                 'version': 1.0}
 
+    @property
     def load(self, payload):
-        print('loading calendar with', payload)
+        print('loading voice with', payload)
         self.payload = payload
-        return True
+        return False
 
     @property
     def response(self):
