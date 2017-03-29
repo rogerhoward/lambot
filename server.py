@@ -32,6 +32,7 @@ def bot():
     """
 
     command_data = flask.request.form
+    print(dict(command_data))
     run_actions(command_data)
 
     response = flask.Response()

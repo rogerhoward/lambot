@@ -23,6 +23,6 @@ class Action(object):
 
     def respond(self):
         if self.response:
-            requests.post(self.payload.get('url'), data = self.response)
+            requests.post(self.payload.get('response_url'), data = self.response)
         else:
             pass
