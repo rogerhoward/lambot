@@ -17,16 +17,6 @@ plugin_source = PluginBase(package='plugins').make_plugin_source(searchpath=['./
 plugin_names = plugin_source.list_plugins()
 
 
-def run_actions(payload):
-    # Payload format documented at https://api.slack.com/slash-commands#how_do_commands_work
-    print(payload)
-    for plugin_name in plugin_names:
-        # Send payload dict to each plugin synchronously
-        # Should make this async so plugins execute in parallel
-        # to avoid one plugin blocking others
-        plugin_source.load_plugin(plugin_name).Action(payload)
-
-
 #------------------------------------------------#
 #  Bot endpoint                                  #
 #------------------------------------------------#
@@ -40,9 +30,16 @@ def bot():
     # Grab form data from Slack inbound, and pass it to plugin dispatch
     command_data = flask.request.form.to_dict()
     print(command_data)
-    run_actions(command_data)
 
-    # Respond immediately with a HTTP 200
+    # Payload format documented at https://api.slack.com/slash-commands#how_do_commands_work
+    print(command_data)
+    for plugin_name in plugin_names:
+        # Send payload dict to each plugin synchronously
+        # Should make this async so plugins execute in parallel
+        # to avoid one plugin blocking others
+        plugin_source.load_plugin(plugin_name).Action(command_data)
+
+    # Respond with a HTTP 200
     # In some cases, a bot might want to send an actual payload back with 
     # the immediate response, but for this project all responses come from
     # plugins which use a Webhook to send the response instead.
@@ -55,7 +52,6 @@ def bot():
 #------------------------------------------------#
 # Supporting endpoints                           #
 #------------------------------------------------#
-
 
 @app.route('/info/')
 def info():
