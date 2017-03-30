@@ -9,7 +9,9 @@ class Action(object):
     def __init__(self, payload):
         print('loading matt plugin with', payload)
         self.payload = payload
-        self.respond()
+
+        if self.payload.get('text', default='').startswith('matt'):
+            self.respond()
 
     @property
     def info(self):
