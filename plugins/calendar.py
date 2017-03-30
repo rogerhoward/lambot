@@ -8,7 +8,11 @@ class Action(object):
     def __init__(self, payload):
         print('loading calendar with', payload)
         self.payload = payload
-        self.respond()
+        
+        try:
+            self.respond()
+        except:
+            print('plugin {} failed. WTF.'.format(self.info['name']))
 
     @property
     def info(self):

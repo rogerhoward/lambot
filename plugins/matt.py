@@ -10,8 +10,11 @@ class Action(object):
         print('loading matt plugin with', payload)
         self.payload = payload
 
-        if self.payload.get('text')[0:4].lower() == 'matt':
-            self.respond()
+        try:
+            if self.payload.get('text')[0:4].lower() == 'matt':
+                self.respond()
+        except:
+            print('plugin {} failed. WTF.'.format(self.info['name']))
 
     @property
     def info(self):
