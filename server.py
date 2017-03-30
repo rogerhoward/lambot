@@ -67,15 +67,6 @@ def info():
     return flask.jsonify({'env': config.ENV, 'plugins': plugins_list})
 
 
-@app.route('/static/<path:filepath>')
-def serve_static(filepath):
-    """
-    Route for serving static assets directly, rather than using S3.
-    Used for CSS, JS and other assets needed for the application.
-    """
-    return flask.send_from_directory(config.STATIC_ROOT, filepath)
-
-
 #------------------------------------------------#
 #  Command line options                          #
 #------------------------------------------------#
