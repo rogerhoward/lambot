@@ -8,6 +8,7 @@ class Action(object):
 
     def __init__(self, payload):
         print('loading matt plugin with', payload)
+        # Payload format documented at https://api.slack.com/slash-commands#how_do_commands_work
         self.payload = payload
 
         try:
