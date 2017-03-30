@@ -4,3 +4,4 @@ simplejson
 Pillow
 boto3
 Flask
+pluginbase

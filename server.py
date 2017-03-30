@@ -2,6 +2,7 @@
 import os
 import flask
 import boto3
+from pluginbase import PluginBase
 import config
 
 try:
@@ -10,6 +11,16 @@ except:
     from StringIO import StringIO
 
 app = flask.Flask(__name__)
+
+
+plugin_source = PluginBase(package='plugins').make_plugin_source(searchpath=['./plugins'])
+plugin_names = plugin_source.list_plugins()
+
+
+def run_actions(payload):
+    print(payload)
+    for plugin_name in plugin_names:
+        plugin_source.load_plugin(plugin_name).Action(payload)
 
 
 #------------------------------------------------#
@@ -22,15 +33,18 @@ def bot():
     Main route which handles inbound Slack commands.
     """
 
-    command_data = flask.request.form
+    command_data = flask.request.form.to_dict()
+    print(command_data)
+    run_actions(command_data)
 
-    if command_data['text'] == '':
-        message = 'Hello world!'
-    else:
-        message = command_data['text']
+    response = flask.Response()
+    response.status_code = 200
+    return response
 
-    response = {'text': message, 'response_type': 'in_channel'}
-    return flask.jsonify(response)
+    # for plugin in plugins:
+    #     if plugin.load(command_data):
+    #         response = {'text': plugin.response, 'response_type': 'ephemeral'}
+    #         return flask.jsonify(response)
 
 
 #------------------------------------------------#
@@ -41,9 +55,11 @@ def bot():
 @app.route('/info/')
 def info():
     """
-    Route which returns all environment variables as a JSON object.
+    Route which returns environmental info as a JSON object.
     """
-    return flask.jsonify({'env': config.ENV})
+    plugins_list = [plugin_source.load_plugin(x).Action(None).info for x in plugin_names]
+
+    return flask.jsonify({'env': config.ENV, 'plugins': plugins_list})
 
 
 @app.route('/static/<path:filepath>')
