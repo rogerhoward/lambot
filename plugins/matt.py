@@ -10,7 +10,7 @@ class Action(object):
         print('loading matt plugin with', payload)
         self.payload = payload
 
-        if self.payload.get('text', default='').startswith('matt'):
+        if self.payload.get('text')[0:4].lower() == 'matt':
             self.respond()
 
     @property
@@ -23,5 +23,5 @@ class Action(object):
     def respond(self):
         url = self.payload.get('response_url')
         if url:
-            response_payload = {'text': 'Shutup, woulda yah?', 'response_type': self.response_type}
+            response_payload = {'text': 'Shutup, would yah?', 'response_type': self.response_type}
             requests.post(url, json=response_payload)
