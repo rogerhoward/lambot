@@ -5,7 +5,7 @@ import random
 
 class Action(object):
     payload = None
-    response_type = 'ephemeral'
+    response_type = 'in_channel'
 
     def __init__(self, payload):
         print('loading mememe plugin with', payload)
