@@ -30,9 +30,10 @@ class Action(object):
         memes = r.json().get('data', {}).get('memes', [])
         if len(memes) > 0:
             random_meme = random.choice(memes)
+            meme_attachment = {'image_url': random_meme['url'], 'fallback': random_meme['name'], 'title': random_meme['name']}
 
             url = self.payload.get('response_url')
 
             if url:
-                response_payload = {'text': random_meme['url'], 'response_type': self.response_type}
+                response_payload = {'text': 'Your hot, fresh meme:', 'attachments': [meme_attachment], 'response_type': self.response_type}
                 requests.post(url, json=response_payload)
