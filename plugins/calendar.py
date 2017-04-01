@@ -1,5 +1,6 @@
 import requests
 import json
+from ..plugins import SimpleAction
 
 class Action(object):
     payload = None
