@@ -30,7 +30,18 @@ class Action(object):
         memes = r.json().get('data', {}).get('memes', [])
         if len(memes) > 0:
             random_meme = random.choice(memes)
-            meme_attachment = {'image_url': random_meme['url'], 'fallback': random_meme['name'], 'title': random_meme['name']}
+
+            if self.payload.get('text') == 'mememe':
+                meme_attachment = {'image_url': random_meme['url'], 'fallback': random_meme['name'], 'title': random_meme['name']}
+            else:
+                caption = self.payload.get('text')[7:]
+                custom_meme = requests.post('https://api.imgflip.com/caption_image', data = {'template_id': random_meme['id'], 'username': 'imgflip_hubot', 'password': 'imgflip_hubot', 'text0': caption}).json()
+
+
+                meme_attachment = {'image_url': custom_meme['data']['url'], 'fallback': random_meme['name'], 'title': random_meme['name']}
+
+
+
 
             url = self.payload.get('response_url')
 
