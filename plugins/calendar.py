@@ -1,6 +1,7 @@
 import requests
 import json
 import datetime
+import arrow
 from action import SimpleAction
 import config
 
@@ -45,8 +46,9 @@ class Action(SimpleAction):
             venue = next_meet['venue']
 
             event_time = datetime.datetime.fromtimestamp(next_meet['time']/1000)
+            event_time_local = arrow.get(event_time, 'US/Pacific')
 
-            venue['timedate'] = event_time.strftime("%d %B %Y %I:%M:%S %p")
+            venue['timedate'] = event_time_local.humanize()
             message = 'The next Meetup will be {timedate} at {name}, located at {address_1}, {city}, {state}'.format(**venue)
 
             location_escaped = '{address},+{city},+{state}'.format(**{'address': venue['address_1'].replace(' ', '+'), 'city': venue['city'].replace(' ', '+'), 'state': venue['state'].replace(' ', '+')})
