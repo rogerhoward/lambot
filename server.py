@@ -4,6 +4,8 @@ import flask
 import boto3
 from pluginbase import PluginBase
 import config
+# import plugins
+from plugins.calendar import Action
 
 try:
     from cStringIO import StringIO
@@ -68,6 +70,7 @@ def info():
 #------------------------------------------------#
 
 def run():
+    s = Action({'channel': 'bot'})
     app.run(processes=3, host='0.0.0.0', port=5000, debug=True)
 
 

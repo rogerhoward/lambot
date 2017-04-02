@@ -1,35 +1,52 @@
 import requests
 import json
-# from ..plugins import SimpleAction
+from plugins import SimpleAction
+import config
 
-class Action(object):
+class Action(SimpleAction):
+    name = 'calendar'
+    title = 'Calendar of Events'
+    description = 'Calendar of Events'
+    version = 0.1
 
-    channels = ['bot', ]
-
-    payload = None
-    response_type = 'ephemeral'
+    feed = 'https://www.meetup.com/code-and-coffee-long-beach/events/atom/'
 
     def __init__(self, payload):
-        print('loading calendar with', payload)
-        self.payload = payload
-        
-        if self.channels and self.payload['channel'] in self.channels:
-            try:
-                self.respond()
-            except:
-                print('plugin {} failed. WTF.'.format(self.info['name']))
+        super(Action, self).__init__(payload)
+        print('loading {} with'.format(self.name), payload)
 
-    @property
-    def info(self):
-        return {'name': 'calendar', 
-                'title': 'Calendar of Events', 
-                'description': 'Calendar of Events', 
-                'version': 1.0}
+    def check(self):
+        if self.payload.get('text', '').startswith('calendar'):
+            return True
+        else:
+            return False
+
+
+    def response(self):
+
+        url = 'https://api.meetup.com/2/events'
+        data = {'offset': 0, 'page': 20, 'format': 'json', 'limited_events': 'False', 'group_urlname': 'code-and-coffee-long-beach', 'photo-host': 'public', 'status':'upcoming', 'key': config.MEETUP_KEY, 'order': 'time', 'desc': 'false', 'fields': ''}
+
+        meetups = requests.get(url, params=data).json().get('results', [])
+
+        if len(meetups) > 0:
+            next_meet = meetups[1]
+            venue = next_meet['venue']
+            message = 'The next Meetup is at {name}, located at {address_1}, {city}, {state}'.format(**venue)
+
+            location_escaped = '{address},+{city},+{state}'.format(**{'address': venue['address_1'].replace(' ', '+'), 'city': venue['city'].replace(' ', '+'), 'state': venue['state'].replace(' ', '+')})
+            map_image = 'https://maps.googleapis.com/maps/api/staticmap?center={location}&zoom=15&scale=2&size=400x400&maptype=roadmap&format=png&visual_refresh=true&markers=size:mid%7Ccolor:0xff0000%7Clabel:1%7C{location}'.format(**{'location': location_escaped})
+
+            attachment = {'title': 'Next meetup', 'text': message, 'image_url': map_image}
+
+            if self.payload.get('response_url'):
+                response_payload = {'text': message, 'response_type': self.response_type, 'attachments': [attachment]}
+                return response_payload
+            else:
+                return None
+
 
     def respond(self):
-        message = 'echo: {}'.format(self.payload.get('text'))
-        url = self.payload.get('response_url')
-        print(message, url)
-        if url:
-            response_payload = {'text': message, 'response_type': self.response_type}
-            requests.post(url, json=response_payload)
+        response = self.response()
+        if response and self.payload.get('response_url'):
+            requests.post(url, json=response)
