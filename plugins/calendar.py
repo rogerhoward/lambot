@@ -40,7 +40,7 @@ class Action(SimpleAction):
         meetups = requests.get(url, params=data).json().get('results', [])
 
         if len(meetups) > 0:
-            next_meet = meetups[1]
+            next_meet = meetups[0]
             venue = next_meet['venue']
             message = 'The next Meetup is at {name}, located at {address_1}, {city}, {state}'.format(**venue)
 
