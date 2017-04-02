@@ -10,11 +10,10 @@ class SimpleAction(object):
     version = None
 
     def __init__(self, instance, payload):
-        self.payload = payload
-
+        self._apply_payload(instance, payload)
 
         print('preparing to load {}...'.format(instance.title))
-        if self.in_channel() and instance.check():
+        if instance.in_channel() and instance.check():
             # try:
             instance.respond()
             # except:
@@ -26,6 +25,19 @@ class SimpleAction(object):
                 'title': self.title, 
                 'description': self.description, 
                 'version': self.version}
+
+    def _apply_payload(self, instance, payload):
+        instance.token = payload.get('token', None)
+        instance.team_id = payload.get('team_id', None)
+        instance.team_domain = payload.get('team_domain', None)
+        instance.channel_id = payload.get('channel_id', None)
+        instance.channel_name = payload.get('channel_name', None)
+        instance.user_id = payload.get('user_id', None)
+        instance.user_name = payload.get('user_name', None)
+        instance.command = payload.get('command', None)
+        instance.text = payload.get('text', None)
+        instance.response_url = payload.get('response_url', None)
+
 
     def in_channel(self):
         if self.channels is None:
