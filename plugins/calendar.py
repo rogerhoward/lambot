@@ -16,7 +16,6 @@ class Action(SimpleAction):
         if self.in_channel() and self.check():
             # try:
             self.respond()
-        super(Action, self).__init__(payload)
 
     def check(self):
         if self.payload.get('text', '').startswith('calendar'):
