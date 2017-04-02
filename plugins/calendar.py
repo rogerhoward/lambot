@@ -54,7 +54,7 @@ class Action(SimpleAction):
             location_escaped = '{address},+{city},+{state}'.format(**{'address': venue['address_1'].replace(' ', '+'), 'city': venue['city'].replace(' ', '+'), 'state': venue['state'].replace(' ', '+')})
             map_image = 'https://maps.googleapis.com/maps/api/staticmap?center={location}&zoom=15&scale=2&size=400x400&maptype=roadmap&format=png&visual_refresh=true&markers=size:mid%7Ccolor:0xff0000%7Clabel:1%7C{location}'.format(**{'location': location_escaped})
 
-            attachment = {'title': 'Next meetup', 'text': message, 'image_url': map_image}
+            attachment = {'title': '{} event location'.format(event_time_local.format('MMMM DD, YYYY')), 'title_link': next_meet.get('event_url'), 'image_url': map_image}
 
             if self.payload.get('response_url'):
                 response_payload = {'text': message, 'response_type': self.response_type, 'attachments': [attachment]}
