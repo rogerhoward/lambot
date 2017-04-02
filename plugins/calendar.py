@@ -1,6 +1,6 @@
 import requests
 import json
-from plugins import SimpleAction
+from action import SimpleAction
 import config
 
 class Action(SimpleAction):
@@ -13,7 +13,6 @@ class Action(SimpleAction):
 
     def __init__(self, payload):
         super(Action, self).__init__(payload)
-        print('loading {} with'.format(self.name), payload)
 
     def check(self):
         if self.payload.get('text', '').startswith('calendar'):
@@ -48,5 +47,6 @@ class Action(SimpleAction):
 
     def respond(self):
         response = self.response()
-        if response and self.payload.get('response_url'):
+        url = self.payload.get('response_url')
+        if response and url:
             requests.post(url, json=response)
