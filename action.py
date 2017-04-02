@@ -40,12 +40,7 @@ class SimpleAction(object):
 
 
     def in_channel(self):
-        if self.channels is None:
-            return True
-        elif self.payload.get('channel') in self.channels:
-            return True
-        else:
-            return False
+        return True
 
     def check(self):
         return False
