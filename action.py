@@ -1,6 +1,7 @@
 
 class SimpleAction(object):
     response_type = 'ephemeral'
+    payload = {}
     channels = ['bot', ]
 
     name = None
@@ -8,14 +9,14 @@ class SimpleAction(object):
     description = None
     version = None
 
-    def __init__(self, payload):
-        self.payload = payload
+    # def __init__(self, payload):
+    #     self.payload = payload
 
-        if self.in_channel() and self.check():
-            # try:
-            self.respond()
-            # except:
-                # print('plugin {} failed. WTF.'.format(self.info['name']))
+    #     if self.in_channel() and self.check():
+    #         # try:
+    #         self.respond()
+    #         # except:
+    #             # print('plugin {} failed. WTF.'.format(self.info['name']))
 
     @property
     def info(self):
