@@ -21,7 +21,9 @@ class Action(SimpleAction):
         return True
 
     def check(self):
-        if self.payload.get('text', '').startswith('calendar'):
+        command = self.payload.get('text', '')
+        print('command:', command)
+        if command.startswith('calendar'):
             print('calendar active and responding...')
             return True
         else:
