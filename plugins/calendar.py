@@ -43,8 +43,11 @@ class Action(SimpleAction):
         if len(meetups) > 0:
             next_meet = meetups[0]
             venue = next_meet['venue']
-            venue['timedate'] = datetime.datetime.fromtimestamp(next_meet['time']).strftime('%c')
-            message = 'The next Meetup is {timedate} at {name}, located at {address_1}, {city}, {state}'.format(**venue)
+
+            event_time = datetime.datetime.fromtimestamp(next_meet['time']/1000)
+
+            venue['timedate'] = event_time.strftime("%d %B %Y %I:%M:%S %p")
+            message = 'The next Meetup will be {timedate} at {name}, located at {address_1}, {city}, {state}'.format(**venue)
 
             location_escaped = '{address},+{city},+{state}'.format(**{'address': venue['address_1'].replace(' ', '+'), 'city': venue['city'].replace(' ', '+'), 'state': venue['state'].replace(' ', '+')})
             map_image = 'https://maps.googleapis.com/maps/api/staticmap?center={location}&zoom=15&scale=2&size=400x400&maptype=roadmap&format=png&visual_refresh=true&markers=size:mid%7Ccolor:0xff0000%7Clabel:1%7C{location}'.format(**{'location': location_escaped})
