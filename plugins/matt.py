@@ -4,6 +4,7 @@ import json
 
 class Action(object):
     payload = None
+    channels = ['bot', ]
     response_type = 'in_channel'
 
     def __init__(self, payload):
@@ -11,11 +12,13 @@ class Action(object):
         # Payload format documented at https://api.slack.com/slash-commands#how_do_commands_work
         self.payload = payload
 
-        try:
-            if self.payload.get('text')[0:4].lower() == 'matt':
-                self.respond()
-        except:
-            print('plugin {} failed. WTF.'.format(self.info['name']))
+
+        if self.channels and self.payload['channel'] in self.channels:
+            try:
+                if self.payload.get('text')[0:4].lower() == 'matt':
+                    self.respond()
+            except:
+                print('plugin {} failed. WTF.'.format(self.info['name']))
 
     @property
     def info(self):

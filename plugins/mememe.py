@@ -4,6 +4,7 @@ import random
 
 
 class Action(object):
+    channels = ['bot', ]
     payload = None
     response_type = 'in_channel'
 
@@ -12,11 +13,14 @@ class Action(object):
         # Payload format documented at https://api.slack.com/slash-commands#how_do_commands_work
         self.payload = payload
 
-        try:
-            if self.payload.get('text')[0:6].lower() == 'mememe':
-                self.respond()
-        except:
-            print('plugin {} failed. WTF.'.format(self.info['name']))
+        
+        if self.channels and self.payload['channel'] in self.channels:
+
+            try:
+                if self.payload.get('text')[0:6].lower() == 'mememe':
+                    self.respond()
+            except:
+                print('plugin {} failed. WTF.'.format(self.info['name']))
 
     @property
     def info(self):

@@ -1,7 +1,9 @@
 import requests
 import json
 
+
 class Action(object):
+    channels = ['bot', ]
     payload = None
     response_type = 'ephemeral'
 
@@ -9,10 +11,11 @@ class Action(object):
         print('loading voice with', payload)
         self.payload = payload
 
-        try:
-            self.respond()
-        except:
-            print('plugin {} failed. WTF.'.format(self.info['name']))
+        if self.channels and self.payload['channel'] in self.channels:
+            try:
+                self.respond()
+            except:
+                print('plugin {} failed. WTF.'.format(self.info['name']))
 
     @property
     def info(self):
