@@ -17,6 +17,9 @@ class Action(SimpleAction):
             # try:
             self.respond()
 
+    def in_channel(self):
+        return True
+
     def check(self):
         if self.payload.get('text', '').startswith('calendar'):
             print('calendar active and responding...')
@@ -48,6 +51,8 @@ class Action(SimpleAction):
                 return response_payload
             else:
                 return None
+        else:
+            return None
 
 
     def respond(self):
