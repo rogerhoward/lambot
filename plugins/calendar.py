@@ -23,6 +23,7 @@ class Action(SimpleAction):
             print('calendar active and responding...')
             return True
         else:
+            print('calendar not responding...')
             return False
 
 
