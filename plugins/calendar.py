@@ -14,6 +14,9 @@ class Action(SimpleAction):
     def __init__(self, payload):
         print('preparing to load calendar...')
         super(Action, self).__init__(payload)
+        if self.in_channel() and self.check():
+            # try:
+            self.respond()
 
     def check(self):
         if self.payload.get('text', '').startswith('calendar'):
