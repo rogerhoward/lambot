@@ -63,7 +63,7 @@ class SimpleAction(object):
         """
         Unwraps values from payload and applies them to the class instance as properties
         """
-        response = self.response()
+        response = self.instance.response()
         if response and self.instance.response_url:
             requests.post(self.instance.response_url, json=response)
 
