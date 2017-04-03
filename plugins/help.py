@@ -5,18 +5,19 @@ import arrow
 from action import SimpleAction
 import config
 
+
 class Action(SimpleAction):
     name = 'help'
     title = 'Lambot Help'
     description = 'Lists available plugins and their descriptions.'
     version = 0.1
-    
+
 
     def in_channel(self):
         return True
 
     def check(self):
-        if self.text.lower = 'help':
+        if self.text.lower == 'help':
             print('help plugin activated..')
             return True
         else:
