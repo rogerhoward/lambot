@@ -22,7 +22,7 @@ def run(token, team_id, team_domain, channel_id, channel_name, user_id, user_nam
             'team_id': team_id,
             'team_domain': team_domain,
             'channel_id': channel_id,
-            'channel_name': channel,
+            'channel_name': channel_name,
             'user_id': user_id,
             'user_name': user_name,
             'command': command,
