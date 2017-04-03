@@ -20,8 +20,8 @@ class Action(SimpleAction):
         return True
 
     def check(self):
-        command = self.payload.get('text', '')
-        if command.startswith('calendar'):
+        # command = self.payload.get('text', '')
+        if self.text.startswith('calendar'):
             print('calendar active and responding...')
             return True
         else:
