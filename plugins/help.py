@@ -17,7 +17,7 @@ class Action(SimpleAction):
         return True
 
     def check(self):
-        if self.text.lower == 'help':
+        if self.text.lower() == 'help':
             print('help plugin activated..')
             return True
         else:
