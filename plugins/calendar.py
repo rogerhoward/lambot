@@ -14,7 +14,6 @@ class Action(SimpleAction):
     feed = 'https://www.meetup.com/code-and-coffee-long-beach/events/atom/'
 
     def __init__(self, payload):
-        print('preparing to load calendar...')
         super(Action, self).__init__(self, payload)
 
     def in_channel(self):
