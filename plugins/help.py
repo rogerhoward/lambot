@@ -35,7 +35,7 @@ class Action(SimpleAction):
 
         message = []
         for this_plugin in self.context['plugins']:
-            plugin_message = '{} (/lambot {})\n{}'.format(this_plugin['title'], this_plugin['name'], this_plugin['description'])
+            plugin_message = '{} (/lambot {})\n{}\n"/lambot {} help" for more detailed help'.format(this_plugin['title'], this_plugin['name'], this_plugin['description'], this_plugin['name'])
             print(plugin_message)
             message.append(plugin_message)
 
