@@ -13,8 +13,8 @@ class Action(SimpleAction):
     help_command = 'calendar help'
     help_string = '"/lambot calendar" will respond with information about our next meetup.'
 
-    def in_channel(self):
-        return True
+    channels = '*'
+
 
     def check(self):
         if self.text.startswith('calendar'):
