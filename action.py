@@ -10,15 +10,25 @@ class SimpleAction(object):
     title = None  # The formal name for your plugin
     description = None  # A lengthier description of your plugin
     version = None  # A version number, if you care.
+    help_command = None
+    help_string = None
 
-    def __init__(self, payload):
+    def __init__(self, payload, context):
+        self.context = context
         self.payload = payload  # Stash a reference to class instance in the base class
         self._apply_payload(payload)  # Expose payload values as instance properties
 
-        # If the command is from the appropriate channel(s) and it passes all other checks, then do it!
-        if self.in_channel() and self.check():
-            print('about to use plugin {}...'.format(self.title))
-            self.respond()
+        # If plugins (and not just being dry-loaded) and has payload and context
+        if context.get('active', False) and payload and context:
+
+            # If this is a plugin help command...
+            if self.text == self.help_command:
+                self.help()
+
+            # If this command is in the right channel and passes other checks...
+            elif self.in_channel() and self.check():
+                print('about to use plugin {}...'.format(self.title))
+                self.respond()
 
     @property
     def info(self):
@@ -34,18 +44,17 @@ class SimpleAction(object):
         """
         Unwraps values from payload and applies them to the class instance as properties
         """
-        self.payload = payload
-
-        self.token = payload.get('token', None)
-        self.team_id = payload.get('team_id', None)
-        self.team_domain = payload.get('team_domain', None)
-        self.channel_id = payload.get('channel_id', None)
-        self.channel_name = payload.get('channel_name', None)
-        self.user_id = payload.get('user_id', None)
-        self.user_name = payload.get('user_name', None)
-        self.command = payload.get('command', None)
-        self.text = payload.get('text', None)
-        self.response_url = payload.get('response_url', None)
+        if payload:
+            self.token = payload.get('token', None)
+            self.team_id = payload.get('team_id', None)
+            self.team_domain = payload.get('team_domain', None)
+            self.channel_id = payload.get('channel_id', None)
+            self.channel_name = payload.get('channel_name', None)
+            self.user_id = payload.get('user_id', None)
+            self.user_name = payload.get('user_name', None)
+            self.command = payload.get('command', None)
+            self.text = payload.get('text', None)
+            self.response_url = payload.get('response_url', None)
 
 
     def in_channel(self):
@@ -75,3 +84,11 @@ class SimpleAction(object):
         The response format is documented at https://api.slack.com/slash-commands#responding_to_a_command
         """
         raise NotImplementedError
+
+    def help(self):
+        """
+        Returns a help message for this command.
+        """
+        if self.response_url:
+            response_payload = {'text': self.help_string, 'response_type': 'ephemeral'}
+            requests.post(self.response_url, json=response_payload)

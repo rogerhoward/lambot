@@ -8,10 +8,10 @@ import config
 class Action(SimpleAction):
     name = 'calendar'
     title = 'Calendar of Events'
-    description = 'Calendar of Events'
+    description = 'Provides access to upcoming Code and Coffee Meetup events.'
     version = 0.1
-
-    feed = 'https://www.meetup.com/code-and-coffee-long-beach/events/atom/'
+    help_command = 'calendar help'
+    help_string = '"/lambot calendar" will respond with information about our next meetup.'
 
     def in_channel(self):
         return True

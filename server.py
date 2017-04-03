@@ -2,22 +2,12 @@
 import os
 import flask
 import boto3
-from pluginbase import PluginBase
 import config
+import plugins
+
 from pprint import pprint
 
-from plugins.calendar import Action
-
-try:
-    from cStringIO import StringIO
-except:
-    from StringIO import StringIO
-
 app = flask.Flask(__name__)
-
-
-plugin_source = PluginBase(package='plugins').make_plugin_source(searchpath=['./plugins'])
-plugin_names = plugin_source.list_plugins()
 
 
 #------------------------------------------------#
@@ -31,14 +21,20 @@ def bot():
     """
 
     # Grab form data from Slack inbound, and pass it to plugin dispatch
+    # Payload format documented at https://api.slack.com/slash-commands#how_do_commands_work
     command_data = flask.request.form.to_dict()
 
-    # Payload format documented at https://api.slack.com/slash-commands#how_do_commands_work
-    for plugin_name in plugin_names:
+    # Load plugin.info for each plugin into a list, to make available to context
+    plugins_list = [plugins.plugin_source.load_plugin(x).Action(command_data, {}).info for x in plugins.plugin_names]
+
+    # Generate context object, populating it with state we might want to access from within a plugin
+    # Making this explicit to force discussions about including new data in context
+    context_data = {'plugins': plugins_list, 'active': True}
+    for plugin_name in plugins.plugin_names:
         # Send payload dict to each plugin synchronously
         # Should make this async so plugins execute in parallel
         # to avoid one plugin blocking others
-        plugin_source.load_plugin(plugin_name).Action(command_data)
+        plugins.plugin_source.load_plugin(plugin_name).Action(command_data, context_data)
 
     # Respond with a HTTP 200
     # In some cases, a bot might want to send an actual payload back with 
@@ -77,7 +73,7 @@ def info():
     """
     Route which returns environmental info as a JSON object.
     """
-    plugins_list = [plugin_source.load_plugin(x).Action(None).info for x in plugin_names]
+    plugins_list = [plugins.plugin_source.load_plugin(x).Action(None, None).info for x in plugins.plugin_names]
 
     return flask.jsonify({'env': config.ENV, 'plugins': plugins_list})
 
