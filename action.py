@@ -15,9 +15,9 @@ class SimpleAction(object):
         self.instance = instance  # Stash a reference to class instance in the base class
         self._apply_payload(payload)  # Expose payload values as instance properties
 
-        print('preparing to load {}...'.format(instance.title))
-
+        # If the command is from the appropriate channel(s) and it passes all other checks, then do it!
         if instance.in_channel() and instance.check():
+            print('about to use plugin {}...'.format(instance.title))
             instance.respond()
 
     @property
@@ -50,7 +50,7 @@ class SimpleAction(object):
 
     def in_channel(self):
         """
-        Should this plugin be activated for the payload, based the channel?
+        Did the command come in on a channel this plugin is listening to?
         """
         return True
 
@@ -72,5 +72,6 @@ class SimpleAction(object):
         """
         Returns the response dictionary for the current payload.
         This should only be run after passing check()
+        The response format is documented at https://api.slack.com/slash-commands#responding_to_a_command
         """
         return None
