@@ -2,13 +2,14 @@ import requests
 
 
 class SimpleAction(object):
-    response_type = 'ephemeral'
-    channels = ['bot', ]
+    response_type = 'ephemeral'  # Set to 'ephemeral' to respond in private, and 'in_channel' to respond publicly 
+    channels = ['bot', ]  # Set to None or empty list to listen on all channels, or whitelist the channels your plugn should listen to
 
-    name = None
-    title = None
-    description = None
-    version = None
+    # Metadata about your plugin
+    name = None  # A shortname for your plugin; should correspond to your Python filename without the .py
+    title = None  # The formal name for your plugin
+    description = None  # A lengthier description of your plugin
+    version = None  # A version number, if you care.
 
     def __init__(self, instance, payload):
         self.instance = instance  # Stash a reference to class instance in the base class
