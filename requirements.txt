@@ -5,3 +5,5 @@ Pillow
 boto3
 Flask
 pluginbase
+arrow
+click
