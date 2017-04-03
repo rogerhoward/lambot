@@ -16,6 +16,8 @@ class Action(SimpleAction):
     help_command = 'help help'
     help_string = '"/help" will respond with information about available commands.'
 
+    channels = '*'
+
 
     def in_channel(self):
         return True
