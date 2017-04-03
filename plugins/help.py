@@ -1,3 +1,5 @@
+import plugins
+
 import requests
 import json
 import datetime
@@ -11,6 +13,8 @@ class Action(SimpleAction):
     title = 'Lambot Help'
     description = 'Lists available plugins and their descriptions.'
     version = 0.1
+    help_command = 'help help'
+    help_string = '"/help" will respond with information about available commands.'
 
 
     def in_channel(self):
@@ -27,5 +31,13 @@ class Action(SimpleAction):
 
     def response(self):
         # Create Slack response payload
-        response_payload = {'text': ', '.join(plugin_names), 'response_type': self.response_type}
+        # plugin_names = [x['name'] for x in self.context['plugins']]
+
+        message = []
+        for this_plugin in self.context['plugins']:
+            plugin_message = '{} (/lambot {})\n{}'.format(this_plugin['title'], this_plugin['name'], this_plugin['description'])
+            print(plugin_message)
+            message.append(plugin_message)
+
+        response_payload = {'text': '\n----------\n'.join(message), 'response_type': self.response_type}
         return response_payload

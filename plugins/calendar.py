@@ -10,7 +10,8 @@ class Action(SimpleAction):
     title = 'Calendar of Events'
     description = 'Calendar of Events'
     version = 0.1
-
+    help_command = 'calender help'
+    help_string = '"/lambot calendar" will respond with information about our next meetup.'
 
     def in_channel(self):
         return True
