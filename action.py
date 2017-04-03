@@ -11,14 +11,14 @@ class SimpleAction(object):
     description = None  # A lengthier description of your plugin
     version = None  # A version number, if you care.
 
-    def __init__(self, instance, payload):
-        self.instance = instance  # Stash a reference to class instance in the base class
+    def __init__(self, payload):
+        self.payload = payload  # Stash a reference to class instance in the base class
         self._apply_payload(payload)  # Expose payload values as instance properties
 
         # If the command is from the appropriate channel(s) and it passes all other checks, then do it!
-        if instance.in_channel() and instance.check():
-            print('about to use plugin {}...'.format(instance.title))
-            instance.respond()
+        if self.in_channel() and self.check():
+            print('about to use plugin {}...'.format(self.title))
+            self.respond()
 
     @property
     def info(self):
@@ -34,39 +34,39 @@ class SimpleAction(object):
         """
         Unwraps values from payload and applies them to the class instance as properties
         """
-        self.instance.payload = payload
+        self.payload = payload
 
-        self.instance.token = payload.get('token', None)
-        self.instance.team_id = payload.get('team_id', None)
-        self.instance.team_domain = payload.get('team_domain', None)
-        self.instance.channel_id = payload.get('channel_id', None)
-        self.instance.channel_name = payload.get('channel_name', None)
-        self.instance.user_id = payload.get('user_id', None)
-        self.instance.user_name = payload.get('user_name', None)
-        self.instance.command = payload.get('command', None)
-        self.instance.text = payload.get('text', None)
-        self.instance.response_url = payload.get('response_url', None)
+        self.token = payload.get('token', None)
+        self.team_id = payload.get('team_id', None)
+        self.team_domain = payload.get('team_domain', None)
+        self.channel_id = payload.get('channel_id', None)
+        self.channel_name = payload.get('channel_name', None)
+        self.user_id = payload.get('user_id', None)
+        self.user_name = payload.get('user_name', None)
+        self.command = payload.get('command', None)
+        self.text = payload.get('text', None)
+        self.response_url = payload.get('response_url', None)
 
 
     def in_channel(self):
         """
         Did the command come in on a channel this plugin is listening to?
         """
-        return True
+        raise NotImplementedError
 
     def check(self):
-        """
+        """ 
         Should this plugin be activated?
         """
-        return False
+        raise NotImplementedError
 
     def respond(self):
         """
         Unwraps values from payload and applies them to the class instance as properties
         """
-        response = self.instance.response()
-        if response and self.instance.response_url:
-            requests.post(self.instance.response_url, json=response)
+        response = self.response()
+        if response and self.response_url:
+            requests.post(self.response_url, json=response)
 
     def response(self):
         """
@@ -74,4 +74,4 @@ class SimpleAction(object):
         This should only be run after passing check()
         The response format is documented at https://api.slack.com/slash-commands#responding_to_a_command
         """
-        return None
+        raise NotImplementedError

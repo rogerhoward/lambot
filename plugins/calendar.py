@@ -13,14 +13,10 @@ class Action(SimpleAction):
 
     feed = 'https://www.meetup.com/code-and-coffee-long-beach/events/atom/'
 
-    def __init__(self, payload):
-        super(Action, self).__init__(self, payload)
-
     def in_channel(self):
         return True
 
     def check(self):
-        # command = self.payload.get('text', '')
         if self.text.startswith('calendar'):
             print('calendar active and responding...')
             return True
