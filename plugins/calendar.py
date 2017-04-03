@@ -11,7 +11,6 @@ class Action(SimpleAction):
     description = 'Calendar of Events'
     version = 0.1
 
-    feed = 'https://www.meetup.com/code-and-coffee-long-beach/events/atom/'
 
     def in_channel(self):
         return True
