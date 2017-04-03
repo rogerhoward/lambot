@@ -12,6 +12,9 @@ TEMP_DIR = '/tmp/'
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 
 
+# Meetup API key
+MEETUP_KEY = '17a7d2079507022374365d23417e'
+
 #------------------------------------------------#
 # ENV VARS                                       #
 #------------------------------------------------#
@@ -38,8 +41,4 @@ if 'AWS_SECRET_ACCESS_KEY' in ENV:
 # Context dict for passing to templates          #
 #------------------------------------------------#
 
-
 CONTEXT = {'URL_PREFIX': URL_PREFIX, 'ENV': ENV}
-
-
-MEETUP_KEY = '17a7d2079507022374365d23417e'
