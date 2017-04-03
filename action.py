@@ -3,7 +3,7 @@ import requests
 
 class SimpleAction(object):
     response_type = 'ephemeral'  # Set to 'ephemeral' to respond in private, and 'in_channel' to respond publicly 
-    channels = ['bot', ]  # Set to None or empty list to listen on all channels, or whitelist the channels your plugn should listen to
+    channels = ['bot', ]  # Set to '*' to listen on all channels, or list the channels your plugn should listen to
 
     # Metadata about your plugin
     name = None  # A shortname for your plugin; should correspond to your Python filename without the .py
@@ -61,7 +61,15 @@ class SimpleAction(object):
         """
         Did the command come in on a channel this plugin is listening to?
         """
-        raise NotImplementedError
+        if self.channels:
+            if self.channels == '*':
+                return True
+            elif self.channel_name in self.channels:
+                return True
+            else:
+                return True
+        else:
+            return False
 
     def check(self):
         """ 
