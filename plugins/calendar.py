@@ -21,7 +21,6 @@ class Action(SimpleAction):
 
     def check(self):
         command = self.payload.get('text', '')
-        print('command:', command)
         if command.startswith('calendar'):
             print('calendar active and responding...')
             return True
@@ -68,10 +67,3 @@ class Action(SimpleAction):
 
         else:
             return None
-
-
-    def respond(self):
-        response = self.response()
-        url = self.payload.get('response_url')
-        if response and url:
-            requests.post(url, json=response)

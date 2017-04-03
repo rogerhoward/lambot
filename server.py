@@ -32,10 +32,8 @@ def bot():
 
     # Grab form data from Slack inbound, and pass it to plugin dispatch
     command_data = flask.request.form.to_dict()
-    print(command_data)
 
     # Payload format documented at https://api.slack.com/slash-commands#how_do_commands_work
-    print(command_data)
     for plugin_name in plugin_names:
         # Send payload dict to each plugin synchronously
         # Should make this async so plugins execute in parallel
