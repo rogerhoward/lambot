@@ -5,7 +5,7 @@ import arrow
 from action import SimpleAction
 import config
 import boto3
-
+from pprint import pprint
 
 class Action(SimpleAction):
     name = 'finger'
@@ -36,10 +36,13 @@ class Action(SimpleAction):
             response_payload = {'text': 'your finger file has been updated', 'response_type': self.response_type}
         else:
             username = self.text[7:]
+            print('username:', username)
             rec = self.dynamodb.get_item(TableName=self.name, Key={'username':{'S': username}})
-            if 'item' in rec:
-                user_finger_file = rec['item']['message']['S']
-                response_payload = {'text': user_finger_file, 'response_type': self.response_type}
+            pprint(rec)
+            if 'Item' in rec:
+                user_finger_file = rec['Item']['message']['S']
+                message = '{} says: {}'.format(username, user_finger_file)
+                response_payload = {'text': message, 'response_type': self.response_type}
             else:
                 response_payload = {'text': 'that username is not recognized', 'response_type': self.response_type}
 
