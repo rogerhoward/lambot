@@ -32,13 +32,12 @@ class Action(SimpleAction):
     def response(self):
         if self.text.startswith('finger update:'):
             finger_message = self.text[14:]
-            self.dynamodb.put_item(TableName=self.name, Item={'username': {'S': username}, 'message': {'S': finger_message}})
+            self.dynamodb.put_item(TableName=self.name, Item={'username': {'S': self.user_name}, 'message': {'S': finger_message}})
             response_payload = {'text': 'your finger file has been updated', 'response_type': self.response_type}
         else:
             username = self.text[7:]
-            print('username:', username)
             rec = self.dynamodb.get_item(TableName=self.name, Key={'username':{'S': username}})
-            pprint(rec)
+
             if 'Item' in rec:
                 user_finger_file = rec['Item']['message']['S']
                 message = '{} says: {}'.format(username, user_finger_file)
