@@ -21,7 +21,6 @@ class Fractal(object):
         self.monochrome = False
 
         self.filename = '{}x{}_{}.png'.format(width, height, iterations)
-        print(self.filename)
 
         self.url = None
 
@@ -31,7 +30,6 @@ class Fractal(object):
         self.s3 = boto3.client('s3')
 
         self.palette = self.make_palette()
-        pprint(self.palette)
 
 
     def make_palette(self):
@@ -67,8 +65,6 @@ class Mandelbrot(Fractal):
         print('rendering...')
         for row in range(self.height):
             for col in range(self.width):
-                # print(col, row)
-
                 c_re = (col - self.width / 2.0) * 4.0 / self.width
                 c_im = (row - self.height / 2.0) * 4.0 / self.width
                 x = 0
