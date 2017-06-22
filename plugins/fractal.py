@@ -122,7 +122,7 @@ class Action(SimpleAction):
 
 
     def response(self):
-        this_fractal = Mandelbrot(600, 400, 50)
+        this_fractal = Mandelbrot(600, 400, 500)
         this_fractal.render().upload()
 
         fractal_attachment = {'image_url': this_fractal.url, 'fallback': str(this_fractal), 'title': str(this_fractal)}
