@@ -109,7 +109,7 @@ class Action(SimpleAction):
     channels = '*'
 
     payload = None
-    response_type = 'in_channel'
+    # response_type = 'in_channel'
 
 
     def check(self):
