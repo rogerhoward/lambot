@@ -44,7 +44,7 @@ class Mandelbrot(Fractal):
     def __repr__(self):
         return 'Mandelbrot({}, {}, ({}))'.format(self.width, self.height, self.iterations)
 
-    def putpixel(self, col, row, color):
+    def draw_pixel(self, col, row, color):
         self.draw.point((col, row), fill = color)
         return True
 
@@ -61,8 +61,6 @@ class Mandelbrot(Fractal):
         print('rendering...')
         for row in range(self.height):
             for col in range(self.width):
-                # print(col, row)
-
                 c_re = (col - self.width / 2.0) * 4.0 / self.width
                 c_im = (row - self.height / 2.0) * 4.0 / self.width
                 x = 0
@@ -76,7 +74,7 @@ class Mandelbrot(Fractal):
                     x = x_new
                     iteration += 1
 
-                self.putpixel(col, row, self.get_color(iteration - 1))
+                self.draw_pixel(col, row, self.get_color(iteration - 1))
         return self
 
     def show(self):
@@ -106,7 +104,7 @@ class Mandelbrot(Fractal):
 #------------------------------------------------#
 
 def run():
-    this_fractal = Mandelbrot(600, 400, 500)
+    this_fractal = Mandelbrot(1600,1200, 500)
     this_fractal.render().upload()
 
     print(this_fractal.url)
