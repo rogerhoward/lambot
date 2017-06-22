@@ -5,6 +5,7 @@ import datetime
 import arrow
 from action import SimpleAction
 import config
+import colorsys
 
 import os
 import io
@@ -17,6 +18,7 @@ class Fractal(object):
         self.width = width
         self.height = height
         self.iterations = iterations
+        self.monochrome = False
 
         self.filename = '{}x{}_{}.png'.format(width, height, iterations)
         print(self.filename)
@@ -27,6 +29,18 @@ class Fractal(object):
         self.draw = ImageDraw.Draw(self.image)
 
         self.s3 = boto3.client('s3')
+
+        self.palette = self.make_palette()
+        pprint(self.palette)
+
+
+    def make_palette(self):
+        palette = []
+        for i in range(self.iterations):
+            h, s, v = i / 256.0, 1, i / (i + 8.0)
+            r, g, b = colorsys.hsv_to_rgb(h,s,v)
+            palette.append((int(r * 255), int(g * 255), int(b * 255)))
+        return palette
 
 
 class Mandelbrot(Fractal):
@@ -41,10 +55,13 @@ class Mandelbrot(Fractal):
         return True
 
     def get_color(self, index):
-        if index < self.iterations:
-            return (255, 255, 255)
+        if self.monochrome:
+            if index < self.iterations:
+                return (255, 255, 255)
+            else:
+                return (0, 0, 0)
         else:
-            return (0, 0, 0)
+            return self.palette[index]
 
     def render(self):
         print('rendering...')
@@ -65,7 +82,7 @@ class Mandelbrot(Fractal):
                     x = x_new
                     iteration += 1
 
-                self.putpixel(col, row, self.get_color(iteration))
+                self.putpixel(col, row, self.get_color(iteration - 1))
         return self
 
     def show(self):
@@ -85,7 +102,6 @@ class Mandelbrot(Fractal):
         return self
 
 
-
 class Action(SimpleAction):
     name = 'fractal'
     title = 'Generates fractals'
@@ -97,7 +113,7 @@ class Action(SimpleAction):
     channels = '*'
 
     payload = None
-    # response_type = 'in_channel'
+    response_type = 'in_channel'
 
 
     def check(self):
